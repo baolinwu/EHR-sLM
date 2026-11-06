@@ -74,10 +74,11 @@ slm( ~ Covid + Sex*Race + Sex*Age, data=LOSj, n = "N", mean = "Avg", sd = "SD")
 ## based on the simulated aggregate summary data; 
 ## fix standard error at the estimated value from the previous model
 ## beta: hypothetical true values
+## full model A
 slm_power(~ Covid + Sex*Race + Sex*Age, LOS0, "Covid", beta = 0:3, sigma = sqrt(Srg$sigma2), n='N')
-
-
-
+## reduced model B
+LOSc = aggregate(N ~ Covid + Sex, data = LOS0, FUN = sum)
+slm_power(~ Covid + Sex, LOSc, "Covid", beta = 0:3, sigma = sqrt(Srg$sigma2), n='N')
 
 ################################################
 #### Equivalence of lm() and slm()
