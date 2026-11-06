@@ -71,6 +71,9 @@ slm( ~ Covid + Sex*Race + Sex*Age, data=LOSj, n = "N", mean = "Avg", sd = "SD")
 ################################################
 #### analytical power calculation
 ################################################
+## based on the simulated aggregate summary data; 
+## fix standard error at the estimated value from the previous model
+## beta: hypothetical true values
 slm_power(~ Covid + Sex*Race + Sex*Age, LOS0, "Covid", beta = 0:3, sigma = sqrt(Srg$sigma2), n='N')
 
 
