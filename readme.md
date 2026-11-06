@@ -48,7 +48,6 @@ slm_ftest(Fint2, B3)
 Srg = slm( ~ Covid + Sex*Race + Sex*Age, data=LOS0, n = "N", mean = "Avg", sd = "SD")
 slm_lack_of_fit(Srg)
 Srg
-coef_table(Srg, type='HC1')
 
 ## Weighted LS, t-test
 naive_wls( ~ Covid + Sex*Race + Sex*Age, data=LOS0, n = "N", mean = "Avg", sd = "SD")
