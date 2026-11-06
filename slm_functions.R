@@ -206,3 +206,30 @@ crude_ttest <- function(data, group, n = "n", mean = "mean", sd = "sd", level = 
   attr(out, "groups") <- g
   out
 }
+
+
+### formula: model formula
+### design: dataset
+### term: exposure of main interest to be tested for significance
+### beta: specific values to be tested
+### sigma: true standard deviation of model
+### alpha: significance levels
+### n: stratum sample sizes to be used in the model/simulation
+slm_power <- function(formula, design, term, beta, sigma, alpha = c(0.05, 0.01, 0.001, 1e-4), n = "n") {
+  design = design[design[[n]] > 0, , drop = FALSE]
+  X  = model.matrix(formula, design); ni <- design[[n]]
+  k  = match(term, colnames(X))
+  vk = solve(crossprod(X, X * ni))[k, k]          # v_k = [(X'WX)^{-1}]_kk
+  se = sigma * sqrt(vk)                           # true SE of beta_k-hat
+  N = sum(ni); M <- nrow(X); K <- ncol(X)
+  pw = function(b, df, a) {                       # two-sided noncentral-t power
+    q = qt(1 - a / 2, df); d <- b / se
+    pt(q, df, d, lower.tail = FALSE) + pt(-q, df, d)
+  }
+  out = expand.grid(beta = beta, alpha = alpha,
+                     method = c("sLM", "naive WLS"), stringsAsFactors = FALSE)
+  out$df    = ifelse(out$method == "sLM", N - K, M - K)
+  out$delta = out$beta / se
+  out$power = mapply(pw, out$beta, out$df, out$alpha)
+  out
+}

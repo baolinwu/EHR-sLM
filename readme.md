@@ -67,6 +67,15 @@ Y1 = eta + rnorm(48)*sig/sqrt(DF0)
 LOSj$Avg = Y1; LOSj$SD = sqrt(S2)
 slm( ~ Covid + Sex*Race + Sex*Age, data=LOSj, n = "N", mean = "Avg", sd = "SD")
 
+
+################################################
+#### analytical power calculation
+################################################
+slm_power(~ Covid + Sex*Race + Sex*Age, LOS0, "Covid", beta = 0:3, sigma = sqrt(Srg$sigma2), n='N')
+
+
+
+
 ################################################
 #### Equivalence of lm() and slm()
 ################################################
